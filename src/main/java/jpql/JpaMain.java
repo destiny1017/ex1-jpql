@@ -16,24 +16,26 @@ public class JpaMain {
         tx.begin();
 
         try {
-            for (int i = 1; i <= 100; i++) {
-                Member member = new Member();
-                member.setUsername("member"+i);
-                member.setAge(10);
-                em.persist(member);
-            }
+            Team team = new Team();
+            team.setName("TeamA");
+            em.persist(team);
+
+            Member member = new Member();
+            member.setUsername("member1");
+            member.setAge(10);
+            member.setTeam(team);
+            em.persist(member);
 
             em.flush();
             em.clear();
 
-            List<Member> result = em.createQuery("select m from Member m order by m.id desc", Member.class)
-                    .setFirstResult(0)
-                    .setMaxResults(10)
+            List<Member> result = em.createQuery("select m from Member m inner join m.team t", Member.class)
                     .getResultList();
 
             System.out.println("result.size() = " + result.size());
             for (Member member1 : result) {
                 System.out.println("member = " + member1);
+                System.out.println("member1.getTeam() = " + member1.getTeam());
             }
 
             tx.commit();
