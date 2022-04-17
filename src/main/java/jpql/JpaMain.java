@@ -26,16 +26,22 @@ public class JpaMain {
             member.setTeam(team);
             em.persist(member);
 
+            Member member2 = new Member();
+            member2.setAge(10);
+            member2.setTeam(team);
+            em.persist(member2);
+
             em.flush();
             em.clear();
 
-            List<Member> result = em.createQuery("select m from Member m inner join m.team t", Member.class)
+//            List<Member> result = em.createQuery("select m from Member m inner join m.team t", Member.class)
+//                    .getResultList();
+            List<String> result = em.createQuery("SELECT coalesce(m.username, 'test') FROM Member m", String.class)
                     .getResultList();
 
             System.out.println("result.size() = " + result.size());
-            for (Member member1 : result) {
-                System.out.println("member = " + member1);
-                System.out.println("member1.getTeam() = " + member1.getTeam());
+            for (String rs : result) {
+                System.out.println("rs = " + rs);
             }
 
             tx.commit();
