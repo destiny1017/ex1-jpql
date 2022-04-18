@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.util.Collection;
 import java.util.List;
 
 public class JpaMain {
@@ -16,20 +17,32 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Team team = new Team();
-            team.setName("TeamA");
-            em.persist(team);
+
+            Team team1 = new Team();
+            team1.setName("TeamA");
+            em.persist(team1);
+
+            Team team2 = new Team();
+            team2.setName("TeamB");
+            em.persist(team2);
 
             Member member = new Member();
             member.setUsername("member1");
             member.setAge(10);
-            member.setTeam(team);
+            member.setTeam(team1);
             em.persist(member);
 
             Member member2 = new Member();
+            member2.setUsername("member2");
             member2.setAge(10);
-            member2.setTeam(team);
+            member2.setTeam(team1);
             em.persist(member2);
+
+            Member member3 = new Member();
+            member3.setUsername("member3");
+            member3.setAge(10);
+            member3.setTeam(team2);
+            em.persist(member3);
 
             em.flush();
             em.clear();
@@ -37,12 +50,13 @@ public class JpaMain {
 //            List<Member> result = em.createQuery("select m from Member m inner join m.team t", Member.class)
 //                    .getResultList();
 
-            String query = "select m.team from Member m";
+//            String query = "select m from Member m join fetch m.team t";
+            String query = "select t from Team t join fetch t.members";
             List<Team> resultList = em.createQuery(query, Team.class)
                     .getResultList();
 
             for (Team t : resultList) {
-                System.out.println("t.toString() = " + t.toString());
+                System.out.println("t = " + t.toString() + ", members.size = " + t.getMembers().size());
             }
 
             tx.commit();
