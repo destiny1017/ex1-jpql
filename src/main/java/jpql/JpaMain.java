@@ -36,12 +36,13 @@ public class JpaMain {
 
 //            List<Member> result = em.createQuery("select m from Member m inner join m.team t", Member.class)
 //                    .getResultList();
-            List<String> result = em.createQuery("SELECT coalesce(m.username, 'test') FROM Member m", String.class)
+
+            String query = "select m.team from Member m";
+            List<Team> resultList = em.createQuery(query, Team.class)
                     .getResultList();
 
-            System.out.println("result.size() = " + result.size());
-            for (String rs : result) {
-                System.out.println("rs = " + rs);
+            for (Team t : resultList) {
+                System.out.println("t.toString() = " + t.toString());
             }
 
             tx.commit();
