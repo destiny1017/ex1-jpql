@@ -5,8 +5,8 @@ import javax.persistence.*;
 import static javax.persistence.FetchType.LAZY;
 
 @SequenceGenerator(
-        name = "MEMBER_SEQ_GENERATOR",
-        sequenceName = "MEMBER_SEQ",
+        name = "MEMBER_SEQ_GENERATOR", // 제너레이터 이름
+        sequenceName = "MEMBER_SEQ", // 매핑할 db시퀀스 이름
         initialValue = 1, allocationSize = 10)
 @NamedQuery(name = "findByName",
         query = "select m from MemberEntity m where m.username = :username")
@@ -14,7 +14,7 @@ import static javax.persistence.FetchType.LAZY;
 public class Member {
 
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE,
-    generator = "MEMBER_SEQ")
+    generator = "MEMBER_SEQ_GENERATOR")
     private Long id;
     private String username;
     private int age;
